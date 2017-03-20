@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <http auto-config="true" use-expressions="true">
+        <!-- Caution! interceptors defined below has a precedence in order  -->
+        <!-- Caution! it means if you are to set /* before /login.html  -->
+        <!-- Caution! /login.html page will not be accessible!  -->
+        <!--<intercept-url pattern="/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>-->
+        <intercept-url pattern="/login.html" access="permitAll"/>
+        <!--<intercept-url pattern="/loginFailed.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>-->
+        <intercept-url pattern="/loginFailed.html" access="permitAll"/>
+        <!--<intercept-url pattern="/logout.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>-->
+        <intercept-url pattern="/logout.html" access="permitAll"/>
+        <!--<intercept-url pattern="/403.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>-->
+        <intercept-url pattern="/403.html" access="permitAll"/>
+        <!--<intercept-url pattern="/*" access="ROLE_USER"/>-->
+        <!--<intercept-url pattern="/*" access="hasRole('ROLE_USER') and hasRole('ROLE_CUSTOMER')"/>-->
+        <intercept-url pattern="/*" access="hasRole('ROLE_USER')"/>
+        <!--<intercept-url pattern="/*" access="ROLE_USER,ROLE_ADMIN"/>-->
+        <!--<http-basic />-->
+        <form-login login-page="/login.html" authentication-failure-url="/loginFailed.html"/>
+        <logout logout-success-url="/logout.html"/>
+        <access-denied-handler error-page="/403.html"/>
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <!--<authentication-provider user-service-ref="userDetailsService">-->
+            <!--<user-service>-->
+            <!--<user name="john" password="wick" authorities="ROLE_USER"/>-->
+            <!--<user name="jack" password="reacher" authorities="ROLE_USER"/>-->
+            <!--</user-service>-->
+            <jdbc-user-service data-source-ref="dataSource"/>
+            <!--<password-encoder hash="md5"/>-->
+            <password-encoder hash="bcrypt"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <beans:property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <beans:property name="url" value="jdbc:mysql://localhost:3306/spring_security"/>
+        <beans:property name="username" value="spring"/>
+        <beans:property name="password" value="p455w0rd"/>
+    </beans:bean>
+
+    <!--<beans:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">-->
+    <!--<beans:property name="dataSource" ref="dataSource"/>-->
+    <!--</beans:bean>-->
+
+</beans:beans>

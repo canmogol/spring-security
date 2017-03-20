@@ -2,6 +2,7 @@
          pageEncoding="ISO-8859-1" %>
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 
 <!DOCTYPE html>
@@ -71,6 +72,7 @@
         </p>
     </div>
 
+    <%--<sec:authorize ifAnyGranted="ROLE_ADMIN">--%>
     <form:form commandName="goal">
         <form:errors path="*" cssClass="errorblock" element="div"/>
         <label for="textinput1">
@@ -81,6 +83,8 @@
         <br/>
         <input type="submit" class="btn" value="Enter Goal Minutes"/>
     </form:form>
+    <%--</sec:authorize>--%>
+
 
     <div class="control-group">
     </div>
