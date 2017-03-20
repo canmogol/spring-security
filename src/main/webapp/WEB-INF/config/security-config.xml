@@ -11,6 +11,15 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
+    <ldap-server ldif="classpath:users.ldif"/>
+
+    <authentication-manager>
+        <ldap-authentication-provider group-search-filter="member={0}"
+                                      group-search-base="ou=groups"
+                                      user-search-base="ou=people"
+                                      user-search-filter="uid={0}" />
+    </authentication-manager>
+
     <http auto-config="true" use-expressions="true">
         <!-- Caution! interceptors defined below has a precedence in order  -->
         <!-- Caution! it means if you are to set /* before /login.html  -->
@@ -33,18 +42,18 @@
         <access-denied-handler error-page="/403.html"/>
     </http>
 
-    <authentication-manager>
-        <authentication-provider>
-            <!--<authentication-provider user-service-ref="userDetailsService">-->
-            <!--<user-service>-->
-            <!--<user name="john" password="wick" authorities="ROLE_USER"/>-->
-            <!--<user name="jack" password="reacher" authorities="ROLE_USER"/>-->
-            <!--</user-service>-->
-            <jdbc-user-service data-source-ref="dataSource"/>
-            <!--<password-encoder hash="md5"/>-->
-            <password-encoder hash="bcrypt"/>
-        </authentication-provider>
-    </authentication-manager>
+    <!--<authentication-manager>-->
+        <!--<authentication-provider>-->
+            <!--&lt;!&ndash;<authentication-provider user-service-ref="userDetailsService">&ndash;&gt;-->
+            <!--&lt;!&ndash;<user-service>&ndash;&gt;-->
+            <!--&lt;!&ndash;<user name="john" password="wick" authorities="ROLE_USER"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<user name="jack" password="reacher" authorities="ROLE_USER"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;</user-service>&ndash;&gt;-->
+            <!--<jdbc-user-service data-source-ref="dataSource"/>-->
+            <!--&lt;!&ndash;<password-encoder hash="md5"/>&ndash;&gt;-->
+            <!--<password-encoder hash="bcrypt"/>-->
+        <!--</authentication-provider>-->
+    <!--</authentication-manager>-->
 
     <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver"/>
